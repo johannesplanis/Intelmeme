@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Intelmeme</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="wybierz_z_galerii">WYBIERZ Z GALERII</string>
+    <string name="wybierz_lokalnie">WYBIERZ LOKALNIE</string>
+    <string name="podaj_link">PODAJ LINK</string>
+    <string name="wybierz_t_o">Wybierz tło</string>
+    <string name="wpisz_wklej_adres_obrazka">WPISZ/WKLEJ ADRES OBRAZKA</string>
+    <string name="dalej">Dalej</string>
+</resources>
