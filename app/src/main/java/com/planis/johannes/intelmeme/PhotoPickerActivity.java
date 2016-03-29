@@ -71,15 +71,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
     }
 
     public void chooseService() {
-        fragmentType = SERVICE;
-        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();
-
+        /*fragmentType = SERVICE;
+        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();*/
+        startMemeCreator();
     }
 
     public void chooseLocally() {
-        fragmentType = LOCALLY;
-        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();
-
+        /*fragmentType = LOCALLY;
+        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();*/
+        startMemeCreator();
     }
 
     public void chooseFromGalerry(){
@@ -107,24 +107,24 @@ public class PhotoPickerActivity extends AppCompatActivity {
             }
             Toast.makeText(this,"Sukces!",Toast.LENGTH_SHORT).show();
 
-            try {
-                InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
-                memeBackground = BitmapFactory.decodeStream(inputStream);
-                startMemeCreator();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
+            parseIntent(data);
 
         }
     }
 
+    private void parseIntent(Intent data){
+        try {
+            InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
+            memeBackground = BitmapFactory.decodeStream(inputStream);
+            App.getInstance().getDataManager().setBitmap(memeBackground);
+            startMemeCreator();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void startMemeCreator(){
-        saveBitmapTemp();
         startActivity(new Intent(this,MemeCreatorActivity.class));
     }
 
-    private void saveBitmapTemp() {
-
-    }
 }
