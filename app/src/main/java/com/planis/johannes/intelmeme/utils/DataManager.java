@@ -1,4 +1,4 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.utils;
 
 import android.graphics.Bitmap;
 

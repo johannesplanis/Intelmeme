@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.planis.johannes.intelmeme.MemeCreatorActivity"
+    tools:context=".activity.MemeCreatorActivity"
     android:orientation="vertical"
     >
 
@@ -51,15 +51,15 @@
 
 
         <ImageView
-            android:focusable="false"
-            android:focusableInTouchMode="false"
             android:id="@+id/ivCreatorImageContainer"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
             tools:src="@drawable/its_something"
             android:background="@color/white"
             />
-        <TextView
+        <com.planis.johannes.intelmeme.ui.CustomTextView
             android:id="@+id/tvCreatorTextFieldTop"
             android:padding="12dp"
             android:textColor="@color/black"
@@ -74,7 +74,7 @@
             android:layout_alignTop="@+id/ivCreatorImageContainer"
             />
 
-        <TextView
+        <com.planis.johannes.intelmeme.ui.CustomTextView
             android:id="@+id/tvCreatorTextFieldBottom"
             android:padding="12dp"
             android:textColor="@color/black"

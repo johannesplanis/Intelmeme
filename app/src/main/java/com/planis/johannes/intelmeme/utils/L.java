@@ -1,6 +1,8 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.utils;
 
 import android.util.Log;
+
+import com.planis.johannes.intelmeme.Constants;
 
 
 /**

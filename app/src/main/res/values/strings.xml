@@ -11,4 +11,10 @@
     <string name="dalej">Dalej</string>
     <string name="zmie_kolor">zmień kolor</string>
     <string name="kliknij_eby_edytowac">KLIKNIJ ŻEBY EDYTOWAC</string>
+    <string name="insert_meme_text">Wpisz tekst mema</string>
+    <string name="save">ZAPISZ</string>
+    <string name="cancel">ANULUJ</string>
+    <string name="two_lines">DWIE_LINIE</string>
+    <string name="top">GÓRA</string>
+    <string name="bottom">DOL</string>
 </resources>

@@ -1,12 +1,24 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.activity;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.planis.johannes.intelmeme.App;
+import com.planis.johannes.intelmeme.Constants;
+import com.planis.johannes.intelmeme.events.ImagePickedLocallyEvent;
+import com.planis.johannes.intelmeme.fragment.PickerFromServiceFragment;
+import com.planis.johannes.intelmeme.fragment.PickerLocalListFragment;
+import com.planis.johannes.intelmeme.fragment.PickerOptionsFragment;
+import com.planis.johannes.intelmeme.R;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -18,11 +30,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     private static final int PICK_IMAGE = 1111;
 
-    private static final int INIT = 11112;
-    private static final int LOCALLY = 33245;
-    private static final int SERVICE = 54233;
-
-    private int fragmentType = INIT;
+    private int fragmentType = Constants.INIT;
 
 
     Bitmap memeBackground;
@@ -48,11 +56,11 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     private android.support.v4.app.Fragment getFragment(){
         switch (fragmentType){
-            case INIT:
+            case Constants.INIT:
                 return new PickerOptionsFragment();
-            case LOCALLY:
+            case Constants.LOCALLY:
                 return new PickerLocalListFragment();
-            case SERVICE:
+            case Constants.SERVICE:
                 return new PickerFromServiceFragment();
             default:
                 return new PickerOptionsFragment();
@@ -62,8 +70,8 @@ public class PhotoPickerActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (fragmentType!=INIT){
-            fragmentType = INIT;
+        if (fragmentType!= Constants.INIT){
+            fragmentType = Constants.INIT;
             getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();
         }else{
             finish();
@@ -73,13 +81,15 @@ public class PhotoPickerActivity extends AppCompatActivity {
     public void chooseService() {
         /*fragmentType = SERVICE;
         getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();*/
-        startMemeCreator();
+        Intent intent = new Intent(this,MemeCreatorActivity.class);
+        intent.putExtra(Constants.SOURCE_MODE,Constants.SERVICE);
+        startActivity(intent);
     }
 
     public void chooseLocally() {
-        /*fragmentType = LOCALLY;
-        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();*/
-        startMemeCreator();
+        fragmentType = Constants.LOCALLY;
+        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();
+
     }
 
     public void chooseFromGalerry(){
@@ -117,14 +127,42 @@ public class PhotoPickerActivity extends AppCompatActivity {
             InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
             memeBackground = BitmapFactory.decodeStream(inputStream);
             App.getInstance().getDataManager().setBitmap(memeBackground);
-            startMemeCreator();
+
+            Intent intent = new Intent(this,MemeCreatorActivity.class);
+            intent.putExtra(Constants.SOURCE_MODE,Constants.GALERRY);
+            startActivity(intent);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void startMemeCreator(){
-        startActivity(new Intent(this,MemeCreatorActivity.class));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Subscribe
+    public void onEvent(ImagePickedLocallyEvent event){
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                onBackPressed();
+            }
+        },500);
+
+        Intent intent = new Intent(this,MemeCreatorActivity.class);
+        intent.putExtra(Constants.SOURCE_MODE,Constants.LOCALLY);
+        intent.putExtra(Constants.LOCAL_IMG_ID,event.getId());
+        startActivity(intent);
+    }
 }

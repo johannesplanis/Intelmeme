@@ -1,6 +1,7 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.os.Bundle;
@@ -14,6 +15,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.planis.johannes.intelmeme.App;
+import com.planis.johannes.intelmeme.Constants;
+import com.planis.johannes.intelmeme.R;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +46,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
     TextView tvCreatorTextFieldBottom;
 
     Bitmap backgroundImage;
-    Integer[] colors = {R.color.black, R.color.red, R.color.green};
+    Integer[] colors = {R.color.black, R.color.red, R.color.green,R.color.white};
 
     private static final int TWO_LINES = 1114;
     private static final int TOP_LINE = 1115;
@@ -53,46 +58,50 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
     int currentColor = 0;
 
+    int imageSourceMode = Constants.ERROR;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meme_creator);
         ButterKnife.bind(this);
 
-        setupView();
 
+        setupView();
     }
 
     private void setupView() {
+
+        Intent intent = getIntent();
+        imageSourceMode = intent.getIntExtra(Constants.SOURCE_MODE,Constants.ERROR);
         backgroundImage = App.getInstance().getDataManager().getBitmap();
-        if (null != backgroundImage) {
-            /*double containerWidth = rlCreatorContainer.getWidth();
-            double containerHeight = rlCreatorContainer.getHeight();
-            double containerCoeff = containerHeight/containerWidth;
-            double width  = backgroundImage.getWidth();
-            double height = backgroundImage.getHeight();
-            double coeff = height/width;
 
+        switch(imageSourceMode){
 
-            if (containerCoeff>coeff){
-                width = containerWidth;
-                height = width*coeff;
-            } else {
-                height = containerHeight;
-                width = height*coeff;
-            }
-            ivCreatorImageContainer.setMaxWidth((int)Math.floor(width)-33);
-            ivCreatorImageContainer.setMaxHeight((int)Math.floor(height));
-*/
-            ivCreatorImageContainer.setImageBitmap(backgroundImage);
+            case Constants.LOCALLY:
+                int id = intent.getIntExtra(Constants.LOCAL_IMG_ID,R.drawable.its_something);
+                ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this,id));
+                break;
+            case Constants.GALERRY:
+                if (null != backgroundImage) {
+                    ivCreatorImageContainer.setImageBitmap(backgroundImage);
+                } else {
+                    ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.its_something));
+                }
+                break;
+            case Constants.SERVICE:
+                String url = intent.getStringExtra(Constants.SERVICE_URL);
+                if (null!=url&&!"".equals(url)){
+                    // TODO: 3/31/2016 load from Picasso
+                    break;
+                }
+            default:
+                ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.its_something));
+                break;
 
-        } else {
-            ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.its_something));
         }
+
     }
-
-
-
 
 
     public void changeColor() {
@@ -151,13 +160,13 @@ public class MemeCreatorActivity extends AppCompatActivity {
         LinearLayout dialogLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.layout_creator_edit_meme_text,null,false);
         final EditText et = (EditText) dialogLayout.findViewById(R.id.etCreatorTextEditor);
         et.setText(tv.getText());
-        builder.setView(dialogLayout).setMessage("Wpisz tekst mema").setPositiveButton("ZAPISZ", new DialogInterface.OnClickListener() {
+        builder.setView(dialogLayout).setMessage(getString(R.string.insert_meme_text)).setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
                 tv.setText(et.getText());
             }
-        }).setNegativeButton("ANULUJ",null).setOnCancelListener(null).create().show();
+        }).setNegativeButton(getString(R.string.cancel),null).create().show();
     }
 
 
@@ -166,17 +175,17 @@ public class MemeCreatorActivity extends AppCompatActivity {
             case TWO_LINES:
                 tvCreatorTextFieldTop.setVisibility(View.VISIBLE);
                 tvCreatorTextFieldBottom.setVisibility(View.VISIBLE);
-                btnCreatorChangeStyle.setText("DWIE_LINIE");
+                btnCreatorChangeStyle.setText(R.string.two_lines);
                 break;
             case TOP_LINE:
                 tvCreatorTextFieldTop.setVisibility(View.VISIBLE);
                 tvCreatorTextFieldBottom.setVisibility(View.GONE);
-                btnCreatorChangeStyle.setText("GÓRA");
+                btnCreatorChangeStyle.setText(R.string.top);
                 break;
             case BOTTOM_LINE:
                 tvCreatorTextFieldTop.setVisibility(View.GONE);
                 tvCreatorTextFieldBottom.setVisibility(View.VISIBLE);
-                btnCreatorChangeStyle.setText("DOL");
+                btnCreatorChangeStyle.setText(R.string.bottom);
                 break;
         }
     }

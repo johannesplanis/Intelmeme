@@ -1,4 +1,4 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.fragment;
 
 
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.planis.johannes.intelmeme.R;
+import com.planis.johannes.intelmeme.activity.PhotoPickerActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;

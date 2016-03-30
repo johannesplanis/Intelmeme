@@ -1,4 +1,4 @@
-package com.planis.johannes.intelmeme;
+package com.planis.johannes.intelmeme.fragment;
 
 
 import android.os.Bundle;
@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+
+import com.planis.johannes.intelmeme.R;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;

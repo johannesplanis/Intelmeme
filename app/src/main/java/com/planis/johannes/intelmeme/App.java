@@ -2,6 +2,8 @@ package com.planis.johannes.intelmeme;
 
 import android.app.Application;
 
+import com.planis.johannes.intelmeme.utils.DataManager;
+
 /**
  * Created by JOHANNES on 3/29/2016.
  */
