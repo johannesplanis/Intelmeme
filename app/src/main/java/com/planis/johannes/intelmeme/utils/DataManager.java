@@ -9,6 +9,16 @@ public class DataManager {
 
     Bitmap bitmap;
 
+    Bitmap finishedMeme;
+
+    public Bitmap getFinishedMeme() {
+        return finishedMeme;
+    }
+
+    public void setFinishedMeme(Bitmap finishedMeme) {
+        this.finishedMeme = finishedMeme;
+    }
+
     public DataManager() {
     }
 

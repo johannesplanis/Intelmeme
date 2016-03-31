@@ -16,4 +16,3 @@ public class Constants {
     public static final int GALERRY = 65456;
     public static final int ERROR = 112;
 }
-

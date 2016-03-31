@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+        xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/light_gray"
+    >
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        tools:src="@drawable/its_something"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rlPreviewShareContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:gravity="center"
+        >
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:id="@+id/imageView2"
+            android:src="@drawable/ic_share_black_48dp"
+            android:tint="@color/gray"
+            android:layout_margin="12dp"
+            android:layout_toLeftOf="@+id/tvPreviewShare"
+            />
+
+        <TextView
+            android:id="@+id/tvPreviewShare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UDOSTĘPNIJ"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/imageView2"
+            android:layout_alignTop="@+id/imageView2"
+            android:textColor="@color/gray"
+            />
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
+
+
+
+

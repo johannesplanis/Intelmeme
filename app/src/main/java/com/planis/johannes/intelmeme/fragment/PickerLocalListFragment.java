@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  */
 public class PickerLocalListFragment extends Fragment {
 
-
     @Bind(R.id.lvChooseLocally)
     ListView lvChooseLocally;
 
@@ -47,9 +46,8 @@ public class PickerLocalListFragment extends Fragment {
     }
 
     private void initView() {
-        // TODO: 3/31/2016 adapter dla obrazków
 
-        List<Integer> list = new ArrayList<Integer>(Arrays.asList(imagesToPick));
+        List<Integer> list = new ArrayList<>(Arrays.asList(imagesToPick));
         LayoutLocalListItemAdapter adapter = new LayoutLocalListItemAdapter(getActivity(),list);
 
         lvChooseLocally.setAdapter(adapter);
