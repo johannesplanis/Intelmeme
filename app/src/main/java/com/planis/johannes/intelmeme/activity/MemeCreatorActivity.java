@@ -200,10 +200,6 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
         View v = rlCreatorSnapshotContainer;
         v.setDrawingCacheEnabled(true);
-        v.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        v.layout(0, 0, v.getMeasuredWidth(), v.getMeasuredHeight());
-        v.buildDrawingCache(true);
 
         final Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -223,6 +219,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         iv.setImageBitmap(bitmap);
         builder.setView(dialogLayout).create().show();
 
+        v.setDrawingCacheEnabled(false);
         v.destroyDrawingCache();
     }
 
