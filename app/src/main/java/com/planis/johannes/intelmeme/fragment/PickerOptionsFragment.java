@@ -48,8 +48,7 @@ public class PickerOptionsFragment extends Fragment {
     }
 
 
-
-    @OnClick({R.id.tvChooseFromGalerry, R.id.tvChooseLocally, R.id.tvChooseService})
+    @OnClick({R.id.tvChooseFromGalerry, R.id.tvChooseLocally})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvChooseFromGalerry:
@@ -58,17 +57,9 @@ public class PickerOptionsFragment extends Fragment {
             case R.id.tvChooseLocally:
                 chooseLocally();
                 break;
-            case R.id.tvChooseService:
-                chooseService();
-                break;
         }
     }
 
-    private void chooseService() {
-        if (null!=activity){
-            activity.chooseService();
-        }
-    }
 
     private void chooseLocally() {
         if (null!=activity){

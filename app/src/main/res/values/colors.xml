@@ -10,6 +10,8 @@
 
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+    <color name="black40">#40000000</color>
+
     <color name="gray">#6c6c6c</color>
     <color name="light_gray">#b9c0cd</color>
     <color name="green">#ff18a035</color>
@@ -18,7 +20,10 @@
     <color name="light_blue">#324668</color>
     <color name="checkbox_disable">#b6b6b6</color>
 
-
+    <color name="yellow">#ffee00</color>
     <color name="red">#cc0b18</color>
     <color name="orange">#ff8800</color>
+
+    <color name="transparent">#00ffffff</color>
+
 </resources>

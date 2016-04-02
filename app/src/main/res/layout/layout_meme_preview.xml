@@ -27,7 +27,7 @@
             android:id="@+id/imageView2"
             android:src="@drawable/ic_share_black_48dp"
             android:tint="@color/gray"
-            android:layout_margin="12dp"
+            android:layout_margin="10dp"
             android:layout_toLeftOf="@+id/tvPreviewShare"
             />
 

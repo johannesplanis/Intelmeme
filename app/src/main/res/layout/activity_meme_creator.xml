@@ -8,52 +8,63 @@
     android:background="@color/light_gray"
     >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_weight="1"
+        android:layout_height="56dp"
         android:layout_alignParentTop="true"
+        android:id="@+id/rlCreatorTopBar"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:padding="10dp"
         >
 
-        <Button
+        <TextView
             android:id="@+id/btnCreatorChangeColor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:text="@string/zmie_kolor"
-            android:layout_centerVertical="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:textSize="10sp"/>
+            android:layout_weight="1"
+            style="@style/TopBtns"
 
-        <View
-            android:id="@+id/vCreatorColorPreview"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/btnCreatorChangeColor"
-            android:background="@color/black"/>
+            />
+        <TextView
+            android:id="@+id/btnCreatorChangeTextSize"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/zmien_rozmiar"
+            android:layout_weight="1"
+            style="@style/TopBtns"
+            android:layout_marginLeft="@dimen/default_margin"
+            android:layout_marginRight="@dimen/default_margin"
+            />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="DWIE LINIE"
-            android:id="@+id/btnCreatorChangeStyle"
-            android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/tvCreatorChangeStyle"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:text="@string/dwie_linie"
+            android:layout_weight="1"
+            style="@style/TopBtns"
+            />
+    </LinearLayout>
+
+
 
     <!--hack żeby imageview nie podjeżdżał na górę-->
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:layout_below="@+id/rlCreatorTopBar"
+            android:layout_above="@+id/rlCreatorBottomBar">
 
             <RelativeLayout
                 android:id="@+id/rlCreatorSnapshotContainer"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_gravity="center"
                 >
                 <ImageView
                     android:id="@+id/ivCreatorImageContainer"
@@ -64,55 +75,78 @@
                     tools:src="@drawable/its_something"
                     android:background="@color/white"
                     />
+
                 <com.planis.johannes.intelmeme.ui.CustomTextView
                     android:id="@+id/tvCreatorTextFieldTop"
-                    android:paddingTop="12dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:textSize="20sp"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
                     android:textColorHint="@color/black"
                     android:text="@string/kliknij_eby_edytowac"
                     android:textAllCaps="true"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="top"
                     android:maxLength="@integer/meme_length_limit"
-                    android:layout_alignTop="@+id/ivCreatorImageContainer"
-                    android:layout_centerHorizontal="true"
-                    />
 
-                <com.planis.johannes.intelmeme.ui.CustomTextView
-                    android:id="@+id/tvCreatorTextFieldBottom"
-                    android:paddingBottom="12dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textColorHint="@color/black"
-                    android:text="@string/kliknij_eby_edytowac"
-                    android:textAllCaps="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLength="@integer/meme_length_limit"
-                    android:layout_alignBottom="@+id/ivCreatorImageContainer"
-                    android:layout_centerHorizontal="true"
 
                     />
+
+                    <com.planis.johannes.intelmeme.ui.CustomTextView
+                        android:id="@+id/tvCreatorTextFieldBottom"
+                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textColorHint="@color/black"
+                        android:text="@string/kliknij_eby_edytowac"
+                        android:textAllCaps="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="bottom"
+                        android:maxLength="@integer/meme_length_limit"
+                        android:layout_alignBottom="@+id/ivCreatorImageContainer"
+                        android:layout_centerHorizontal="true"
+                        />
+
+
+
 
             </RelativeLayout>
         </FrameLayout>
 
-
-
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/rlCreatorTopBar"
+        android:background="@color/black40"
+        />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/rlCreatorBottomBar"
+        android:background="@color/black40"
+        />
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:layout_weight="1"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:id="@+id/rlCreatorBottomBar"
+        android:background="@color/white"
+        android:padding="10dp"
+        >
 
-        <Button
-            style="@style/PickerBtns"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="generuj"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/generuj"
             android:id="@+id/btnCreatorSave"
-            android:layout_centerInParent="true"
+            android:background="@color/orange"
+            android:textSize="@dimen/text_size_big"
+            style="@style/CreatorBtns"
+            android:textColor="@color/white"
              />
     </RelativeLayout>
 </RelativeLayout>

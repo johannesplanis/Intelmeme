@@ -3,18 +3,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.PickerLocalListFragment"
-    android:background="@color/light_gray"
     >
 
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center"
+        android:textAllCaps="true"
         android:text="@string/wybierz_t_o"
+        android:background="@color/white"
+        android:textColor="@color/light_blue"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:textSize="22sp"
+        android:textSize="@dimen/text_size_big"
         android:padding="7dp"/>
 
     <ListView
@@ -23,4 +26,12 @@
         android:id="@+id/lvChooseLocally"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true" />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/textView"
+        android:background="@color/black40"
+        />
+
 </RelativeLayout>

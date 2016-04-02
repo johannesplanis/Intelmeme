@@ -8,7 +8,6 @@ public class Constants {
 
     public static final String SOURCE_MODE = "SOURCE_MODE";
     public static final String LOCAL_IMG_ID = "LOCAL_IMG_ID";
-    public static final String SERVICE_URL = "SERVICE_URL";
 
     public static final int INIT = 11112;
     public static final int LOCALLY = 33245;

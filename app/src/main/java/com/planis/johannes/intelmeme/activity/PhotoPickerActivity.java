@@ -11,11 +11,10 @@ import android.widget.Toast;
 
 import com.planis.johannes.intelmeme.App;
 import com.planis.johannes.intelmeme.Constants;
+import com.planis.johannes.intelmeme.R;
 import com.planis.johannes.intelmeme.events.ImagePickedLocallyEvent;
-import com.planis.johannes.intelmeme.fragment.PickerFromServiceFragment;
 import com.planis.johannes.intelmeme.fragment.PickerLocalListFragment;
 import com.planis.johannes.intelmeme.fragment.PickerOptionsFragment;
-import com.planis.johannes.intelmeme.R;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -31,7 +30,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
     private static final int PICK_IMAGE = 1111;
 
     private int fragmentType = Constants.INIT;
-
 
     Bitmap memeBackground;
 
@@ -60,8 +58,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
                 return new PickerOptionsFragment();
             case Constants.LOCALLY:
                 return new PickerLocalListFragment();
-            case Constants.SERVICE:
-                return new PickerFromServiceFragment();
             default:
                 return new PickerOptionsFragment();
         }
@@ -78,13 +74,6 @@ public class PhotoPickerActivity extends AppCompatActivity {
         }
     }
 
-    public void chooseService() {
-        /*fragmentType = SERVICE;
-        getSupportFragmentManager().beginTransaction().replace(R.id.flPickerContainer,getFragment()).commit();*/
-        Intent intent = new Intent(this,MemeCreatorActivity.class);
-        intent.putExtra(Constants.SOURCE_MODE,Constants.SERVICE);
-        startActivity(intent);
-    }
 
     public void chooseLocally() {
         fragmentType = Constants.LOCALLY;
@@ -112,10 +101,9 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK){
             if (data == null) {
-                Toast.makeText(this,"Nie udało się otworzyć pliku",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.file_open_failure,Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(this,"Sukces!",Toast.LENGTH_SHORT).show();
 
             parseIntent(data);
 

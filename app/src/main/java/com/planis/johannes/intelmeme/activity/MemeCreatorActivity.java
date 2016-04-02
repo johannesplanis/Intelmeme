@@ -1,16 +1,18 @@
 package com.planis.johannes.intelmeme.activity;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 import com.planis.johannes.intelmeme.App;
 import com.planis.johannes.intelmeme.Constants;
 import com.planis.johannes.intelmeme.R;
+import com.planis.johannes.intelmeme.utils.L;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -40,32 +43,30 @@ public class MemeCreatorActivity extends AppCompatActivity {
     @Bind(R.id.ivCreatorImageContainer)
     ImageView ivCreatorImageContainer;
 
-    @Bind(R.id.vCreatorColorPreview)
-    View vCreatorColorPreview;
-    @Bind(R.id.btnCreatorChangeStyle)
-    Button btnCreatorChangeStyle;
     @Bind(R.id.tvCreatorTextFieldTop)
     TextView tvCreatorTextFieldTop;
     @Bind(R.id.tvCreatorTextFieldBottom)
     TextView tvCreatorTextFieldBottom;
     @Bind(R.id.rlCreatorSnapshotContainer)
     RelativeLayout rlCreatorSnapshotContainer;
-    @Bind(R.id.btnCreatorSave)
-    Button btnCreatorSave;
 
 
+    Bitmap bitmap;
     Bitmap backgroundImage;
-    Integer[] colors = {R.color.black, R.color.red, R.color.green, R.color.white};
+    Integer[] colors = {R.color.black, R.color.white, R.color.red, R.color.green, R.color.yellow};
+    Float[] textSizes = {20f,22f,24f,26f,28f,30f};
 
     private static final int TWO_LINES = 1114;
     private static final int TOP_LINE = 1115;
     private static final int BOTTOM_LINE = 1116;
-
+    private static final int REQUEST_WRITE_STORAGE = 112;
     Integer[] memeTypes = {TWO_LINES, TOP_LINE, BOTTOM_LINE};
 
     int memeType = 0;
 
     int currentColor = 0;
+
+    int currentTextSize = 0;
 
     int imageSourceMode = Constants.ERROR;
 
@@ -81,9 +82,21 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
     private void setupView() {
 
+
+
         Intent intent = getIntent();
+
+        String action = intent.getAction();
+        String type = intent.getType();
+
         imageSourceMode = intent.getIntExtra(Constants.SOURCE_MODE, Constants.ERROR);
-        backgroundImage = App.getInstance().getDataManager().getBitmap();
+
+
+        if (Intent.ACTION_SEND.equals(action) && null !=type) {
+            if (type.startsWith("image/")){
+                imageSourceMode = Constants.SERVICE;
+            }
+        }
 
         switch (imageSourceMode) {
 
@@ -91,25 +104,34 @@ public class MemeCreatorActivity extends AppCompatActivity {
                 int id = intent.getIntExtra(Constants.LOCAL_IMG_ID, R.drawable.its_something);
                 ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, id));
                 break;
+
             case Constants.GALERRY:
+                backgroundImage = App.getInstance().getDataManager().getBitmap();
                 if (null != backgroundImage) {
                     ivCreatorImageContainer.setImageBitmap(backgroundImage);
                 } else {
                     ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.its_something));
                 }
                 break;
+
             case Constants.SERVICE:
-                String url = intent.getStringExtra(Constants.SERVICE_URL);
-                if (null != url && !"".equals(url)) {
-                    // TODO: 3/31/2016 load from Picasso
-                    break;
-                }
+                Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                L.d(imageUri.getPath());
+                loadImageFromUri(imageUri);
+                break;
+
             default:
                 ivCreatorImageContainer.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.its_something));
                 break;
-
         }
+    }
 
+    private void loadImageFromUri(Uri imageUri) {
+
+        if (null != imageUri) {
+            //ivCreatorImageContainer.setImageURI(null);
+            ivCreatorImageContainer.setImageURI(imageUri);
+        }
     }
 
 
@@ -121,8 +143,6 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
         int colorId = colors[currentColor];
         int color = ContextCompat.getColor(this, colorId);
-
-        vCreatorColorPreview.setBackgroundColor(color);
 
         tvCreatorTextFieldTop.setTextColor(color);
         tvCreatorTextFieldBottom.setTextColor(color);
@@ -137,10 +157,10 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.btnCreatorChangeStyle, R.id.tvCreatorTextFieldTop, R.id.tvCreatorTextFieldBottom, R.id.btnCreatorChangeColor, R.id.btnCreatorSave})
+    @OnClick({R.id.tvCreatorChangeStyle, R.id.tvCreatorTextFieldTop, R.id.tvCreatorTextFieldBottom, R.id.btnCreatorChangeColor, R.id.btnCreatorSave,R.id.btnCreatorChangeTextSize})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btnCreatorChangeStyle:
+            case R.id.tvCreatorChangeStyle:
                 changeStyle();
                 break;
             case R.id.tvCreatorTextFieldTop:
@@ -155,7 +175,20 @@ public class MemeCreatorActivity extends AppCompatActivity {
             case R.id.btnCreatorSave:
                 saveMeme();
                 break;
+            case R.id.btnCreatorChangeTextSize:
+                changeSize();
+                break;
         }
+    }
+
+    private void changeSize() {
+        currentTextSize++;
+        if (currentTextSize==textSizes.length){
+            currentTextSize = 0;
+        }
+        tvCreatorTextFieldTop.setTextSize(textSizes[currentTextSize]);
+        tvCreatorTextFieldBottom.setTextSize(textSizes[currentTextSize]);
+
     }
 
 
@@ -181,17 +214,14 @@ public class MemeCreatorActivity extends AppCompatActivity {
             case TWO_LINES:
                 tvCreatorTextFieldTop.setVisibility(View.VISIBLE);
                 tvCreatorTextFieldBottom.setVisibility(View.VISIBLE);
-                btnCreatorChangeStyle.setText(R.string.two_lines);
                 break;
             case TOP_LINE:
                 tvCreatorTextFieldTop.setVisibility(View.VISIBLE);
                 tvCreatorTextFieldBottom.setVisibility(View.GONE);
-                btnCreatorChangeStyle.setText(R.string.top);
                 break;
             case BOTTOM_LINE:
                 tvCreatorTextFieldTop.setVisibility(View.GONE);
                 tvCreatorTextFieldBottom.setVisibility(View.VISIBLE);
-                btnCreatorChangeStyle.setText(R.string.bottom);
                 break;
         }
     }
@@ -213,7 +243,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shareMeme(bitmap);
+                attemptShare(bitmap);
             }
         });
         iv.setImageBitmap(bitmap);
@@ -223,8 +253,23 @@ public class MemeCreatorActivity extends AppCompatActivity {
         v.destroyDrawingCache();
     }
 
-    private void shareMeme(Bitmap bitmap) {
 
+    private void attemptShare(Bitmap bitmap) {
+
+        this.bitmap = bitmap;
+
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        }else{
+            shareBitmap(bitmap);
+        }
+    }
+
+    private void shareBitmap(Bitmap bitmap) {
         Uri uri = storeImage(bitmap);
 
         if (uri != null) {
@@ -235,10 +280,30 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
             startActivity(Intent.createChooser(shareIntent, "Share Image"));
         } else {
-        Toast.makeText(MemeCreatorActivity.this,"Wystąpił błąd!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MemeCreatorActivity.this,"Wystąpił błąd!",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode)
+        {
+            case REQUEST_WRITE_STORAGE: {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    shareBitmap(bitmap);
+                } else
+                {
+
+                    Toast.makeText(this, "Wystąpił błąd, przyznaj uprawnienie zapisu na karcie żeby kontynuować", Toast.LENGTH_LONG).show();
+                }
+            }
         }
 
     }
+
 
     private Uri storeImage(Bitmap b) {
 
@@ -260,7 +325,10 @@ public class MemeCreatorActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         return Uri.parse("file://" + file.getAbsolutePath());
     }
+
+
 
 }
