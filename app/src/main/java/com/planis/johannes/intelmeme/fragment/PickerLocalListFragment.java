@@ -27,7 +27,7 @@ public class PickerLocalListFragment extends Fragment {
     @Bind(R.id.lvChooseLocally)
     ListView lvChooseLocally;
 
-    Integer[] imagesToPick = {R.drawable.fuck_yeah,R.drawable.success_kid,R.drawable.einstein,R.drawable.its_something};
+    private Integer[] imagesToPick = {R.drawable.fuck_yeah,R.drawable.success_kid,R.drawable.einstein,R.drawable.its_something};
 
     public PickerLocalListFragment() {
         // Required empty public constructor

@@ -55,8 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
             android:layout_below="@+id/rlCreatorTopBar"
             android:layout_above="@+id/rlCreatorBottomBar">
 
@@ -95,7 +93,7 @@
 
                     <com.planis.johannes.intelmeme.ui.CustomTextView
                         android:id="@+id/tvCreatorTextFieldBottom"
-                        android:layout_marginBottom="@dimen/activity_vertical_margin"
+                        android:layout_marginBottom="18dp"
                         android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textColorHint="@color/black"
@@ -110,7 +108,24 @@
                         android:layout_centerHorizontal="true"
                         />
 
-
+                <TextView
+                    android:id="@+id/tvCreatorCopyright"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Created with Intelmeme\u00AE"
+                    android:textStyle="bold"
+                    android:textColor="@color/light_blue"
+                    android:background="@color/light_gray"
+                    android:layout_below="@+id/ivCreatorImageContainer"
+                    android:layout_alignRight="@+id/ivCreatorImageContainer"
+                    android:layout_alignLeft="@+id/ivCreatorImageContainer"
+                    android:gravity="right"
+                    android:paddingTop="2dp"
+                    android:paddingRight="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingBottom="2dp"
+                    android:visibility="invisible"
+                    />
 
 
             </RelativeLayout>

@@ -7,9 +7,9 @@ import android.graphics.Bitmap;
  */
 public class DataManager {
 
-    Bitmap bitmap;
+    private Bitmap bitmap;
 
-    Bitmap finishedMeme;
+    private Bitmap finishedMeme;
 
     public Bitmap getFinishedMeme() {
         return finishedMeme;

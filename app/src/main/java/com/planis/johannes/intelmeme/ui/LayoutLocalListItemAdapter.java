@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class LayoutLocalListItemAdapter extends BaseAdapter {
 
-    private List<Integer> objects = new ArrayList<Integer>();
+    private List<Integer> objects = new ArrayList<>();
 
     private Context context;
     private LayoutInflater layoutInflater;
@@ -53,7 +53,7 @@ public class LayoutLocalListItemAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.layout_local_list_item, null);
             convertView.setTag(new ViewHolder(convertView));
         }
-        initializeViews((Integer)getItem(position), (ViewHolder) convertView.getTag());
+        initializeViews(getItem(position), (ViewHolder) convertView.getTag());
         return convertView;
     }
 

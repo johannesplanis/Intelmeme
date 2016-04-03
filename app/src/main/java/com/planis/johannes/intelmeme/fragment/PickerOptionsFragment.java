@@ -19,7 +19,7 @@ import butterknife.OnClick;
  */
 public class PickerOptionsFragment extends Fragment {
 
-    PhotoPickerActivity activity;
+    private PhotoPickerActivity activity;
 
     public PickerOptionsFragment() {
         // Required empty public constructor

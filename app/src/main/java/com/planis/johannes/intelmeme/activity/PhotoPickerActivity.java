@@ -31,7 +31,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
 
     private int fragmentType = Constants.INIT;
 
-    Bitmap memeBackground;
+    private Bitmap memeBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

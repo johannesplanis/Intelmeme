@@ -9,7 +9,7 @@ import com.planis.johannes.intelmeme.Constants;
  * Created by pliszka on 09.10.15.
  */
 public class L {
-    public static final String TAG = "PLANIS_LABS";
+    private static final String TAG = "PLANIS_LABS";
 
     public static void i(String str) {
         if (Constants.DEBUG_LOG) {

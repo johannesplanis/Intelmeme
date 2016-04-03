@@ -2,24 +2,18 @@
     <string name="app_name">Intelmeme</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="wybierz_z_galerii">WYBIERZ Z GALERII</string>
-    <string name="wybierz_lokalnie">WYBIERZ Z LISTY</string>
-    <string name="podaj_link">PODAJ LINK OBRAZKA</string>
+    <string name="wybierz_z_galerii">WYBIERZ TŁO Z GALERII</string>
+    <string name="wybierz_lokalnie">WYBIERZ TŁO Z LISTY</string>
     <string name="wybierz_t_o">Klasyka gatunku</string>
-    <string name="wpisz_wklej_adres_obrazka">WPISZ/WKLEJ ADRES OBRAZKA</string>
-    <string name="dalej">Dalej</string>
     <string name="zmie_kolor">ZMIEN KOLOR</string>
     <string name="kliknij_eby_edytowac">KLIKNIJ ŻEBY EDYTOWAC</string>
     <string name="insert_meme_text">Wpisz tekst mema</string>
     <string name="save">ZAPISZ</string>
     <string name="cancel">ANULUJ</string>
-    <string name="two_lines">DWIE_LINIE</string>
-    <string name="top">GÓRA</string>
-    <string name="bottom">DOL</string>
     <string name="file_open_failure">Nie udało się otworzyć pliku</string>
     <string name="generuj">GENERUJ</string>
     <string name="dwie_linie">ZMIEN TYP</string>
     <string name="zmien_rozmiar">ZMIEN ROZMIAR</string>
-    <string name="picker_welcome">Stworzenie mema jest teraz\n prostsze niż kiedykolwiek!\n Jedyne co musisz zrobić\n to wybrać jego tło.</string>
+    <string name="picker_welcome">Tworzenie mema jest teraz\n prostsze niż kiedykolwiek!</string>
+    <string name="udost_pnij">UDOSTĘPNIJ</string>
 </resources>

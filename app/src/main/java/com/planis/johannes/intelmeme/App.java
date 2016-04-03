@@ -12,11 +12,6 @@ public class App extends Application {
     private DataManager dataManager;
     private static App instance = new App();
 
-    @Override
-    public void onCreate() {
-
-        super.onCreate();
-    }
 
     public DataManager getDataManager(){
         if (null == dataManager){

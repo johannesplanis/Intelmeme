@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -49,26 +50,27 @@ public class MemeCreatorActivity extends AppCompatActivity {
     TextView tvCreatorTextFieldBottom;
     @Bind(R.id.rlCreatorSnapshotContainer)
     RelativeLayout rlCreatorSnapshotContainer;
+    @Bind(R.id.tvCreatorCopyright)
+    TextView tvCreatorCopyright;
 
-
-    Bitmap bitmap;
-    Bitmap backgroundImage;
-    Integer[] colors = {R.color.black, R.color.white, R.color.red, R.color.green, R.color.yellow};
-    Float[] textSizes = {20f,22f,24f,26f,28f,30f};
+    private Bitmap bitmap;
+    private Bitmap backgroundImage;
+    private Integer[] colors = {R.color.black, R.color.white, R.color.red, R.color.green, R.color.yellow};
+    private Float[] textSizes = {20f,22f,24f,26f,28f,30f};
+    private Integer[] memeTypes = {TWO_LINES, TOP_LINE, BOTTOM_LINE};
 
     private static final int TWO_LINES = 1114;
     private static final int TOP_LINE = 1115;
     private static final int BOTTOM_LINE = 1116;
     private static final int REQUEST_WRITE_STORAGE = 112;
-    Integer[] memeTypes = {TWO_LINES, TOP_LINE, BOTTOM_LINE};
 
-    int memeType = 0;
+    private int memeType = 0;
 
-    int currentColor = 0;
+    private int currentColor = 0;
 
-    int currentTextSize = 0;
+    private int currentTextSize = 0;
 
-    int imageSourceMode = Constants.ERROR;
+    private int imageSourceMode = Constants.ERROR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +117,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
                 break;
 
             case Constants.SERVICE:
-                Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                Uri imageUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
                 L.d(imageUri.getPath());
                 loadImageFromUri(imageUri);
                 break;
@@ -135,7 +137,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-    public void changeColor() {
+    private void changeColor() {
         currentColor++;
         if (currentColor == colors.length) {
             currentColor = 0;
@@ -198,7 +200,11 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
         LinearLayout dialogLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.layout_creator_edit_meme_text, null, false);
         final EditText et = (EditText) dialogLayout.findViewById(R.id.etCreatorTextEditor);
+        if (!getString(R.string.kliknij_eby_edytowac).equals(tv.getText())){
         et.setText(tv.getText());
+        }else{
+            et.setHint(tv.getText());
+        }
         builder.setView(dialogLayout).setMessage(getString(R.string.insert_meme_text)).setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -226,8 +232,9 @@ public class MemeCreatorActivity extends AppCompatActivity {
         }
     }
 
-    public void saveMeme() {
+    private void saveMeme() {
 
+        tvCreatorCopyright.setVisibility(View.VISIBLE);
         View v = rlCreatorSnapshotContainer;
         v.setDrawingCacheEnabled(true);
 
@@ -248,6 +255,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         });
         iv.setImageBitmap(bitmap);
         builder.setView(dialogLayout).create().show();
+        tvCreatorCopyright.setVisibility(View.INVISIBLE);
 
         v.setDrawingCacheEnabled(false);
         v.destroyDrawingCache();
@@ -286,7 +294,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode)
         {
