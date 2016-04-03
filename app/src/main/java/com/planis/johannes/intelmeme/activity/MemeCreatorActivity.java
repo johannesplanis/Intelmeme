@@ -245,31 +245,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         final Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-
-        bitmapUri = storeImage(bitmap);
-
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        RelativeLayout dialogLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.layout_meme_preview, null, false);
-        ImageView iv = (ImageView) dialogLayout.findViewById(R.id.imageView);
-        RelativeLayout rl = (RelativeLayout) dialogLayout.findViewById(R.id.rlPreviewShareContainer);
-        rl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                attemptShare(bitmapUri);
-            }
-        });
-        iv.setImageBitmap(bitmap);
-        builder.setView(dialogLayout).create().show();
-        tvCreatorCopyright.setVisibility(View.INVISIBLE);
-
-        v.setDrawingCacheEnabled(false);
-        v.destroyDrawingCache();
-    }
-
-
-    private void attemptShare(Uri uri) {
+        this.bitmap = bitmap;
 
 
         boolean hasPermission = (ContextCompat.checkSelfPermission(this,
@@ -279,8 +255,21 @@ public class MemeCreatorActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         }else{
-            shareBitmap(uri);
+            bitmapUri = storeImage(bitmap);
+            setupAlertDialog();
         }
+
+        tvCreatorCopyright.setVisibility(View.INVISIBLE);
+
+        v.setDrawingCacheEnabled(false);
+        v.destroyDrawingCache();
+    }
+
+
+    private void attemptShare(Uri uri) {
+        shareBitmap(uri);
+
+
     }
 
     private void shareBitmap(Uri uri) {
@@ -306,7 +295,8 @@ public class MemeCreatorActivity extends AppCompatActivity {
             case REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    shareBitmap(bitmapUri);
+                    bitmapUri = storeImage(bitmap);
+                    setupAlertDialog();
                 } else
                 {
 
@@ -315,6 +305,21 @@ public class MemeCreatorActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void setupAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        RelativeLayout dialogLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.layout_meme_preview, null, false);
+        ImageView iv = (ImageView) dialogLayout.findViewById(R.id.imageView);
+        RelativeLayout rl = (RelativeLayout) dialogLayout.findViewById(R.id.rlPreviewShareContainer);
+        rl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptShare(bitmapUri);
+            }
+        });
+        iv.setImageBitmap(bitmap);
+        builder.setView(dialogLayout).create().show();
     }
 
 
