@@ -54,6 +54,10 @@ public class MemeCreatorActivity extends AppCompatActivity {
     TextView tvCreatorCopyright;
 
     private Bitmap bitmap;
+
+    private Uri bitmapUri;
+
+
     private Bitmap backgroundImage;
     private Integer[] colors = {R.color.black, R.color.white, R.color.red, R.color.green, R.color.yellow};
     private Float[] textSizes = {20f,22f,24f,26f,28f,30f};
@@ -242,6 +246,9 @@ public class MemeCreatorActivity extends AppCompatActivity {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
 
+        bitmapUri = storeImage(bitmap);
+
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         RelativeLayout dialogLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.layout_meme_preview, null, false);
@@ -250,7 +257,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         rl.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptShare(bitmap);
+                attemptShare(bitmapUri);
             }
         });
         iv.setImageBitmap(bitmap);
@@ -262,9 +269,8 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-    private void attemptShare(Bitmap bitmap) {
+    private void attemptShare(Uri uri) {
 
-        this.bitmap = bitmap;
 
         boolean hasPermission = (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
@@ -273,12 +279,11 @@ public class MemeCreatorActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         }else{
-            shareBitmap(bitmap);
+            shareBitmap(uri);
         }
     }
 
-    private void shareBitmap(Bitmap bitmap) {
-        Uri uri = storeImage(bitmap);
+    private void shareBitmap(Uri uri) {
 
         if (uri != null) {
             Intent shareIntent = new Intent();
@@ -301,7 +306,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
             case REQUEST_WRITE_STORAGE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    shareBitmap(bitmap);
+                    shareBitmap(bitmapUri);
                 } else
                 {
 
@@ -317,7 +322,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
         FileOutputStream fileOutputStream = null;
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File file = new File(path, "cwth_" + Calendar.getInstance().getTimeInMillis()+ ".jpg");
+        File file = new File(path, "Intelmeme_" + Calendar.getInstance().getTimeInMillis()+ ".jpg");
         try {
             fileOutputStream = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
