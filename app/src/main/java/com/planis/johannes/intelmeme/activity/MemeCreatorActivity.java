@@ -59,8 +59,8 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
 
     private Bitmap backgroundImage;
-    private Integer[] colors = {R.color.black, R.color.white, R.color.red, R.color.green, R.color.yellow};
-    private Float[] textSizes = {20f,22f,24f,26f,28f,30f};
+    private Integer[] colors = {R.color.white, R.color.red, R.color.green, R.color.yellow,R.color.blue};
+    private Float[] textSizes = {24f,26f,28f,30f,32f};
     private Integer[] memeTypes = {TWO_LINES, TOP_LINE, BOTTOM_LINE};
 
     private static final int TWO_LINES = 1114;
@@ -196,6 +196,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         tvCreatorTextFieldBottom.setTextSize(textSizes[currentTextSize]);
 
     }
+
 
 
     private void editMemeText(final TextView tv) {
