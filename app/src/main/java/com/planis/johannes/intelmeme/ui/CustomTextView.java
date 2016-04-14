@@ -3,8 +3,6 @@ package com.planis.johannes.intelmeme.ui;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -18,19 +16,8 @@ public class CustomTextView extends TextView {
     public CustomTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.setTypeface(Typeface.createFromAsset(context.getAssets(),"fonts/impact.ttf"));
-
     }
 
-    private static Paint getWhiteBorderPaint(){
-        Paint p = new Paint(R.color.white);
-        return p;
-    }
-
-    private static final Paint BLACK_BORDER_PAINT = getWhiteBorderPaint();
-
-    static {
-        BLACK_BORDER_PAINT.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OUT));
-    }
 
     private static final int BORDER_WIDTH = 5;
 
@@ -40,7 +27,7 @@ public class CustomTextView extends TextView {
         int originalColor = this.getCurrentTextColor();
         this.setTextColor(0xff000000); //set it to white.
 
-        canvas.saveLayer(null, BLACK_BORDER_PAINT, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+        canvas.saveLayer(null, new Paint(R.color.black), Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
                 | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.MATRIX_SAVE_FLAG);
 
         drawBackground(canvas, -BORDER_WIDTH, -BORDER_WIDTH);
