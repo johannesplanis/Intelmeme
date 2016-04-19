@@ -26,6 +26,18 @@
                 <data android:mimeType="image/*" />
             </intent-filter>
         </activity>
+        
+        
+        <provider
+            android:authorities="com.planis.johannes.intelmeme.fileprovider"
+            android:name="android.support.v4.content.FileProvider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+
+        </provider>
     </application>
 
 </manifest>

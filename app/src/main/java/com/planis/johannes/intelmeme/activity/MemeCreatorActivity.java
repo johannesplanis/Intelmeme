@@ -9,8 +9,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -41,6 +43,7 @@ import butterknife.OnClick;
 public class MemeCreatorActivity extends AppCompatActivity {
 
 
+    private static final String TAG = "IntelmemeTAG";
     @Bind(R.id.ivCreatorImageContainer)
     ImageView ivCreatorImageContainer;
 
@@ -55,12 +58,12 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
     private Bitmap bitmap;
 
-    private Uri bitmapUri;
+    private String bitmapUri;
 
 
     private Bitmap backgroundImage;
-    private Integer[] colors = {R.color.white, R.color.red, R.color.green, R.color.yellow,R.color.blue};
-    private Float[] textSizes = {24f,26f,28f,30f,32f};
+    private Integer[] colors = {R.color.white, R.color.red, R.color.green, R.color.yellow, R.color.blue};
+    private Float[] textSizes = {24f, 26f, 28f, 30f, 32f};
     private Integer[] memeTypes = {TWO_LINES, TOP_LINE, BOTTOM_LINE};
 
     private static final int TWO_LINES = 1114;
@@ -89,7 +92,6 @@ public class MemeCreatorActivity extends AppCompatActivity {
     private void setupView() {
 
 
-
         Intent intent = getIntent();
 
         String action = intent.getAction();
@@ -98,8 +100,8 @@ public class MemeCreatorActivity extends AppCompatActivity {
         imageSourceMode = intent.getIntExtra(Constants.SOURCE_MODE, Constants.ERROR);
 
 
-        if (Intent.ACTION_SEND.equals(action) && null !=type) {
-            if (type.startsWith("image/")){
+        if (Intent.ACTION_SEND.equals(action) && null != type) {
+            if (type.startsWith("image/")) {
                 imageSourceMode = Constants.SERVICE;
             }
         }
@@ -135,7 +137,6 @@ public class MemeCreatorActivity extends AppCompatActivity {
     private void loadImageFromUri(Uri imageUri) {
 
         if (null != imageUri) {
-            //ivCreatorImageContainer.setImageURI(null);
             ivCreatorImageContainer.setImageURI(imageUri);
         }
     }
@@ -163,7 +164,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tvCreatorChangeStyle, R.id.tvCreatorTextFieldTop, R.id.tvCreatorTextFieldBottom, R.id.btnCreatorChangeColor, R.id.btnCreatorSave,R.id.btnCreatorChangeTextSize})
+    @OnClick({R.id.tvCreatorChangeStyle, R.id.tvCreatorTextFieldTop, R.id.tvCreatorTextFieldBottom, R.id.btnCreatorChangeColor, R.id.btnCreatorSave, R.id.btnCreatorChangeTextSize})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tvCreatorChangeStyle:
@@ -179,7 +180,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
                 changeColor();
                 break;
             case R.id.btnCreatorSave:
-                saveMeme();
+                generateMeme();
                 break;
             case R.id.btnCreatorChangeTextSize:
                 changeSize();
@@ -189,7 +190,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
 
     private void changeSize() {
         currentTextSize++;
-        if (currentTextSize==textSizes.length){
+        if (currentTextSize == textSizes.length) {
             currentTextSize = 0;
         }
         tvCreatorTextFieldTop.setTextSize(textSizes[currentTextSize]);
@@ -198,16 +199,15 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-
     private void editMemeText(final TextView tv) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         LinearLayout dialogLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.layout_creator_edit_meme_text, null, false);
         final EditText et = (EditText) dialogLayout.findViewById(R.id.etCreatorTextEditor);
-        if (!getString(R.string.kliknij_eby_edytowac).equals(tv.getText())){
-        et.setText(tv.getText());
-        }else{
+        if (!getString(R.string.kliknij_eby_edytowac).equals(tv.getText())) {
+            et.setText(tv.getText());
+        } else {
             et.setHint(tv.getText());
         }
         builder.setView(dialogLayout).setMessage(getString(R.string.insert_meme_text)).setPositiveButton(getString(R.string.save), new DialogInterface.OnClickListener() {
@@ -237,8 +237,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         }
     }
 
-    private void saveMeme() {
-
+    private void generateMeme(){
         tvCreatorCopyright.setVisibility(View.VISIBLE);
         View v = rlCreatorSnapshotContainer;
         v.setDrawingCacheEnabled(true);
@@ -248,17 +247,8 @@ public class MemeCreatorActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         this.bitmap = bitmap;
 
-
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_STORAGE);
-        }else{
-            bitmapUri = storeImage(bitmap);
-            setupAlertDialog();
-        }
+        saveToProvider(bitmap);
+        setupAlertDialog();
 
         tvCreatorCopyright.setVisibility(View.INVISIBLE);
 
@@ -266,24 +256,39 @@ public class MemeCreatorActivity extends AppCompatActivity {
         v.destroyDrawingCache();
     }
 
+    private void saveMeme() {
 
-    private void attemptShare(Uri uri) {
-        shareBitmap(uri);
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) {
 
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_STORAGE);
+        } else {
+
+            storeImage(bitmap);
+        }
 
     }
 
-    private void shareBitmap(Uri uri) {
 
-        if (uri != null) {
+    private void shareBitmapFromProvider() {
+
+        File imagePath = new File(getCacheDir(),"images");
+        File fileToShare = new File(imagePath,"meme.png");
+        Uri contentUri = FileProvider.getUriForFile(this, "com.planis.johannes.intelmeme.fileprovider", fileToShare);
+
+        if (contentUri != null) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION); // temp permission for receiving app to read this file
+            shareIntent.setDataAndType(contentUri, getContentResolver().getType(contentUri));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, contentUri);
             shareIntent.setType("image/*");
-
-            startActivity(Intent.createChooser(shareIntent, "Share Image"));
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_meme)));
         } else {
-            Toast.makeText(MemeCreatorActivity.this,"Wystąpił błąd!",Toast.LENGTH_SHORT).show();
+            Toast.makeText(MemeCreatorActivity.this, "Wystąpił błąd!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -291,15 +296,13 @@ public class MemeCreatorActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_WRITE_STORAGE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    bitmapUri = storeImage(bitmap);
-                    setupAlertDialog();
-                } else
-                {
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    storeImage(bitmap);
+
+                } else {
 
                     Toast.makeText(this, "Wystąpił błąd, przyznaj uprawnienie zapisu na karcie żeby kontynuować", Toast.LENGTH_LONG).show();
                 }
@@ -312,11 +315,18 @@ public class MemeCreatorActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         RelativeLayout dialogLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.layout_meme_preview, null, false);
         ImageView iv = (ImageView) dialogLayout.findViewById(R.id.imageView);
-        RelativeLayout rl = (RelativeLayout) dialogLayout.findViewById(R.id.rlPreviewShareContainer);
-        rl.setOnClickListener(new View.OnClickListener() {
+        RelativeLayout rlShare = (RelativeLayout) dialogLayout.findViewById(R.id.rlPreviewShareContainer);
+        RelativeLayout rlDownload = (RelativeLayout) dialogLayout.findViewById(R.id.rlPreviewDownloadContainer);
+        rlShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                attemptShare(bitmapUri);
+                shareBitmapFromProvider();
+            }
+        });
+        rlDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveMeme();
             }
         });
         iv.setImageBitmap(bitmap);
@@ -324,11 +334,16 @@ public class MemeCreatorActivity extends AppCompatActivity {
     }
 
 
-    private Uri storeImage(Bitmap b) {
+    /**
+     * pod zapisywanie określonego obrazka na telefonie
+     * @param b
+     * @return
+     */
+    private String storeImage(Bitmap b) {
 
         FileOutputStream fileOutputStream = null;
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File file = new File(path, "Intelmeme_" + Calendar.getInstance().getTimeInMillis()+ ".jpg");
+        File file = new File(path, "Intelmeme_" + Calendar.getInstance().getTimeInMillis() + ".jpg");
         try {
             fileOutputStream = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
@@ -336,6 +351,7 @@ public class MemeCreatorActivity extends AppCompatActivity {
         }
         BufferedOutputStream bos = new BufferedOutputStream(fileOutputStream);
         b.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+
         try {
             bos.flush();
             bos.close();
@@ -344,10 +360,43 @@ public class MemeCreatorActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return Uri.parse("file://" + file.getAbsolutePath());
+        if (file.exists()){
+            // TODO: 4/19/2016 action view - otwiera przeglądarkę plików
+            Snackbar.make(rlCreatorSnapshotContainer,"Obrazek został zapisany w folderze Pictures w pamięci wewnętrznej",Snackbar.LENGTH_LONG).show();
+        }
+        return file.getAbsolutePath();
     }
 
+
+    private void deleteImage(String path) {
+
+        if (null != bitmapUri) {
+
+            File file = new File(bitmapUri);
+
+            if (file.exists()) {
+
+                file.delete();
+                sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(new File(bitmapUri))));
+            }
+        }
+    }
+
+    private void saveToProvider(Bitmap b){
+        try {
+
+            File cachePath = new File(getCacheDir(), "images");
+            cachePath.mkdirs(); // don't forget to make the directory
+            FileOutputStream stream = new FileOutputStream(cachePath + "/meme.png");
+            b.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            stream.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

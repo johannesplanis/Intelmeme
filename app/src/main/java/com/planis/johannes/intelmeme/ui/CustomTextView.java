@@ -27,7 +27,9 @@ public class CustomTextView extends TextView {
         int originalColor = this.getCurrentTextColor();
         this.setTextColor(0xff000000); //set it to white.
 
-        canvas.saveLayer(null, new Paint(R.color.black), Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
+        Paint paint = new Paint(R.color.black);
+
+        canvas.saveLayer(null, paint, Canvas.HAS_ALPHA_LAYER_SAVE_FLAG
                 | Canvas.FULL_COLOR_LAYER_SAVE_FLAG | Canvas.MATRIX_SAVE_FLAG);
 
         drawBackground(canvas, -BORDER_WIDTH, -BORDER_WIDTH);

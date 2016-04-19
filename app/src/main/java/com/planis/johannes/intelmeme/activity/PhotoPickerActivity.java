@@ -146,7 +146,7 @@ public class PhotoPickerActivity extends AppCompatActivity {
             public void run() {
                 onBackPressed();
             }
-        },500);
+        },100);
 
         Intent intent = new Intent(this,MemeCreatorActivity.class);
         intent.putExtra(Constants.SOURCE_MODE,Constants.LOCALLY);
