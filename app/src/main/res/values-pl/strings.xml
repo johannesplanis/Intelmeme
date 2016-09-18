@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Intelmeme</string>
+
+    <string name="choose_background">Wybierz żródło obrazka:</string>
+    <string name="wybierz_z_galerii">Galeria zdjęć</string>
+    <string name="wybierz_lokalnie">Popularne obrazki</string>
+    <string name="wybierz_t_o">Popularne obrazki</string>
+    <string name="file_open_failure">Nie udało się otworzyć obrazka</string>
+    <string name="kliknij_eby_edytowac">Kliknij, żeby edytować</string>
+    <string name="insert_meme_text">Wpisz tekst mema</string>
+    <string name="zmie_kolor">Kolor</string>
+    <string name="dwie_linie">Typ</string>
+    <string name="zmien_rozmiar">Rozmiar</string>
+    <string name="save">Zapisz</string>
+    <string name="cancel">Anuluj</string>
+    <string name="generuj">Generuj</string>
+    <string name="picker_welcome">Tworzenie mema jest teraz\n prostsze niż kiedykolwiek!</string>
+    <string name="udost_pnij">Udostępnij</string>
+    <string name="share_meme">Udostępnij mema</string>
+    <string name="select_image_prompt">Wybierz zdjęcie</string>
+    <string name="meme_saved_info">Obrazek został zapisany w folderze Pictures</string>
+</resources>

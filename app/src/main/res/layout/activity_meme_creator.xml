@@ -25,6 +25,7 @@
             android:text="@string/zmie_kolor"
             android:layout_weight="1"
             style="@style/TopBtns"
+            android:onClick="onClick"
 
             />
         <TextView
@@ -36,6 +37,8 @@
             style="@style/TopBtns"
             android:layout_marginLeft="@dimen/default_margin"
             android:layout_marginRight="@dimen/default_margin"
+            android:onClick="onClick"
+
             />
 
         <TextView
@@ -45,6 +48,8 @@
             android:text="@string/dwie_linie"
             android:layout_weight="1"
             style="@style/TopBtns"
+            android:onClick="onClick"
+
             />
     </LinearLayout>
 
@@ -89,6 +94,7 @@
                     android:gravity="center"
                     android:layout_gravity="top"
                     android:maxLength="@integer/meme_length_limit"
+                    android:onClick="onClick"
 
 
                     />
@@ -108,6 +114,8 @@
                         android:maxLength="@integer/meme_length_limit"
                         android:layout_alignBottom="@+id/ivCreatorImageContainer"
                         android:layout_centerHorizontal="true"
+                        android:onClick="onClick"
+
                         />
 
                 <TextView
@@ -164,6 +172,8 @@
             android:textSize="@dimen/text_size_big"
             style="@style/CreatorBtns"
             android:textColor="@color/white"
-             />
+            android:onClick="onClick"
+
+            />
     </RelativeLayout>
 </RelativeLayout>

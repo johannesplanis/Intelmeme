@@ -1,6 +1,4 @@
 <resources>
-
-    //for translated variants of strings refer to respective folders
     <string name="app_name">Intelmeme</string>
 
     <string name="choose_background">Pick source of meme image:</string>
@@ -20,5 +18,5 @@
     <string name="udost_pnij">Share</string>
     <string name="share_meme">Share meme</string>
     <string name="select_image_prompt">Select Image</string>
-    <string name="meme_saved_info">Obrazek został zapisany w folderze Pictures w pamięci wewnętrznej</string>
+    <string name="meme_saved_info">Image saved in Pictures folder</string>
 </resources>

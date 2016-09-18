@@ -1,8 +1,8 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragment.PickerOptionsFragment"
     android:background="@color/white"
     android:orientation="vertical"
     android:gravity="center"
@@ -35,20 +35,31 @@
         android:textColor="@color/gray"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"
+        android:gravity="center"
+        android:text="@string/choose_background"
+        android:textSize="20sp"
+        android:textColor="@color/gray"
+        />
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="0.4"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:paddingTop="24dp"
         >
 
     <TextView
+        android:onClick="chooseFromGalerry"
         style="@style/PickerBtns"
         android:text="@string/wybierz_z_galerii"
         android:id="@+id/tvChooseFromGalerry"/>
 
     <TextView
+        android:onClick="chooseLocally"
         style="@style/PickerBtns"
         android:text="@string/wybierz_lokalnie"
         android:id="@+id/tvChooseLocally" />
@@ -57,3 +68,4 @@
 
 
 </LinearLayout>
+</layout>
